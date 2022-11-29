@@ -11,7 +11,7 @@
         "editor.defaultFormatter": "ms-python.black-formatter",
         "editor.formatOnSave": true
     },
-    // "python.analysis.autoImportCompletions": true,
+    "python.analysis.autoImportCompletions": true,
     // "python.analysis.typeCheckingMode": "strict",
     "python.formatting.provider": "none",
     "emmet.includeLanguages": { "django-html": "html" },
