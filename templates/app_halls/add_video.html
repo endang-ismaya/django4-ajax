@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+<!-- static -->
+{% load static %}
+
+<!-- content -->
+{% block content %}
+<div class="container">
+  <h2>Add Video</h2>
+  <form method="POST">
+    {% csrf_token %}
+
+    <!-- form -->
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Add</button>
+  </form>
+
+  <h2>OR</h2>
+  <form method="GET">{{search_form.as_p}}</form>
+</div>
+{% endblock content %}
+<!-- end content -->

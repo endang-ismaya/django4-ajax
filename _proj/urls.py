@@ -33,6 +33,8 @@ urlpatterns = [
     path("halloffames/<int:pk>", views.DetailHall.as_view(), name="detail_hall"),
     path("halloffames/<int:pk>/update", views.UpdateHall.as_view(), name="update_hall"),
     path("halloffames/<int:pk>/delete", views.DeleteHall.as_view(), name="delete_hall"),
+    # video
+    path("halloffames/<int:pk>/addvideo", views.add_video, name="add_video"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
