@@ -8,13 +8,13 @@ from .models import Hall
 
 # Create your views here.
 def home(request):
-    # ctx = {"user": {"is_authenticated": True}}
     ctx = {}
-    return render(request, "app_halls/dashboard.html", ctx)
+    return render(request, "app_halls/home.html", ctx)
 
 
 def dashboard(request):
-    pass
+    ctx = {}
+    return render(request, "app_halls/dashboard.html", ctx)
 
 
 class SignUp(generic.CreateView):
@@ -54,9 +54,14 @@ class DetailHall(generic.DetailView):
     template_name = "app_halls/detail_hall.html"
 
 
-class UpdateHall(generic.CreateView):
-    pass
+class UpdateHall(generic.UpdateView):
+    model = Hall
+    template_name = "app_halls/update_hall.html"
+    fields = ["title"]
+    success_url = reverse_lazy("dashboard")
 
 
-class DeleteHall(generic.CreateView):
-    pass
+class DeleteHall(generic.DeleteView):
+    model = Hall
+    template_name = "app_halls/delete_hall.html"
+    success_url = reverse_lazy("dashboard")

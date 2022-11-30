@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+<!-- static -->
+{% load static %}
+
+<!-- content -->
+{% block content %}
+<div class="container">
+  <h2>Update Hall</h2>
+  <form method="POST">
+    {% csrf_token %}
+
+    <!-- form -->
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Update Hall</button>
+  </form>
+
+  <br />
+  <a href="{% url 'delete_hall' hall.id %}" class="btn btn-danger">
+    Delete This Hall of Fame
+  </a>
+</div>
+{% endblock content %}
+<!-- end content -->
