@@ -10,7 +10,11 @@ from .models import Hall
 def home(request):
     # ctx = {"user": {"is_authenticated": True}}
     ctx = {}
-    return render(request, "app_halls/home.html", ctx)
+    return render(request, "app_halls/dashboard.html", ctx)
+
+
+def dashboard(request):
+    pass
 
 
 class SignUp(generic.CreateView):
@@ -43,3 +47,16 @@ class CreateHall(generic.CreateView):
         form.instance.user = self.request.user
         super(CreateHall, self).form_valid(form)
         return redirect(reverse_lazy("home"))
+
+
+class DetailHall(generic.DetailView):
+    model = Hall
+    template_name = "app_halls/detail_hall.html"
+
+
+class UpdateHall(generic.CreateView):
+    pass
+
+
+class DeleteHall(generic.CreateView):
+    pass
