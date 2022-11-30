@@ -24,9 +24,11 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.home, name="home"),
     # auth
-    path("signup", views.SignUp.as_view(), name="signup"),
-    path("login", auth_view.LoginView.as_view(), name="login"),
-    path("logout", auth_view.LogoutView.as_view(), name="logout"),
+    path("signup/", views.SignUp.as_view(), name="signup"),
+    path("login/", auth_view.LoginView.as_view(), name="login"),
+    path("logout/", auth_view.LogoutView.as_view(), name="logout"),
+    # halls
+    path("halloffame/create", views.CreateHall.as_view(), name="create_hall"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
