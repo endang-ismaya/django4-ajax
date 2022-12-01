@@ -8,8 +8,8 @@ class VideoForm(forms.ModelForm):
         model = Video
         fields = ["title", "url", "youtube_id"]
         labels = {
-            "title": _("Video Title"),
-            "url": _("Video URL"),
+            "title": _("Youtube Title"),
+            "url": _("Youtube URL"),
             "youtube_id": _("Youtube ID"),
         }
 

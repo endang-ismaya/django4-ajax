@@ -1,13 +1,22 @@
+import urllib
+
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
+from django.conf import settings
+from django.http import Http404
+from django.forms.utils import ErrorList
 
 from .models import Hall, Video
 from .forms import SearchForm, VideoForm
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # from django.forms import formset_factory
+
 
 # Create your views here.
 def home(request):
@@ -23,6 +32,10 @@ def dashboard(request):
 def add_video(request, pk):
     form = VideoForm
     search_form = SearchForm()
+    hall = Hall.objects.get(pk=pk)
+
+    if not hall.user == request.user:
+        raise Http404
 
     if request.method == "POST":
         """CREATE"""
@@ -31,12 +44,19 @@ def add_video(request, pk):
         if filled_form.is_valid():
             video = Video()
             video.url = filled_form.cleaned_data["url"]
-            video.title = filled_form.cleaned_data["title"]
-            video.youtube_id = filled_form.cleaned_data["youtube_id"]
-            video.hall = Hall.objects.get(pk=pk)
+
+            parsed_url = urllib.parse.urlparse(video.url)
+            video_id = urllib.parse.parse_qs(parsed_url.query).get("v")
+
+            if video_id:
+
+                # video.title = filled_form.cleaned_data["title"]
+                # video.youtube_id = filled_form.cleaned_data["youtube_id"]
+                video.hall = hall
+
             video.save()
 
-    ctx = {"form": form, "search_form": search_form}
+    ctx = {"form": form, "search_form": search_form, "hall": hall}
     return render(request, "app_halls/add_video.html", ctx)
 
 
