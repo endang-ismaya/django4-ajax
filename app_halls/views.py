@@ -7,7 +7,7 @@ from django.views import generic
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
 from django.conf import settings
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.forms.utils import ErrorList
 
 from .models import Hall, Video
@@ -24,11 +24,18 @@ def home(request):
     ctx = {}
     return render(request, "app_halls/home.html", ctx)
 
-
 def dashboard(request):
     ctx = {}
     return render(request, "app_halls/dashboard.html", ctx)
 
+def video_search(request):
+    search_form = SearchForm(request.GET)
+    if search_form.is_valid():
+        encoded_term = urllib.parse.quote(search_form.cleaned_data["search_term"])
+        response = requests.get(f"https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=6&q={encoded_term}&key={settings.YOUTUBE_API_KEYS}")
+        json = response.json()
+        return JsonResponse({"data": json})
+    return JsonResponse({"data": "null"})
 
 def add_video(request, pk):
     form = VideoForm
@@ -40,12 +47,12 @@ def add_video(request, pk):
 
     if request.method == "POST":
         """CREATE"""
-        filled_form = VideoForm(request.POST)
+        form = VideoForm(request.POST)
 
-        if filled_form.is_valid():
+        if form.is_valid():
             video = Video()
             video.hall = hall
-            video.url = filled_form.cleaned_data["url"]
+            video.url = form.cleaned_data["url"]
 
             parsed_url = urllib.parse.urlparse(video.url)
             video_id = urllib.parse.parse_qs(parsed_url.query).get("v")
@@ -59,7 +66,7 @@ def add_video(request, pk):
                 video.save()
                 return redirect("detail_hall", pk)
             else:
-                errors = filled_form._errors.setdefault("url", ErrorList())
+                errors = form._errors.setdefault("url", ErrorList())
                 errors.append("please provide a valid Youtube's URL")
 
     ctx = {"form": form, "search_form": search_form, "hall": hall}

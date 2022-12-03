@@ -35,6 +35,7 @@ urlpatterns = [
     path("halloffames/<int:pk>/delete", views.DeleteHall.as_view(), name="delete_hall"),
     # video
     path("halloffames/<int:pk>/addvideo", views.add_video, name="add_video"),
+    path("video/search", views.video_search, name="video_search"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
