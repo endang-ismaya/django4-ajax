@@ -1,4 +1,5 @@
 import urllib
+import requests
 
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -43,18 +44,23 @@ def add_video(request, pk):
 
         if filled_form.is_valid():
             video = Video()
+            video.hall = hall
             video.url = filled_form.cleaned_data["url"]
 
             parsed_url = urllib.parse.urlparse(video.url)
             video_id = urllib.parse.parse_qs(parsed_url.query).get("v")
 
             if video_id:
-
-                # video.title = filled_form.cleaned_data["title"]
-                # video.youtube_id = filled_form.cleaned_data["youtube_id"]
-                video.hall = hall
-
-            video.save()
+                video.youtube_id = video_id[0]
+                response = requests.get(f"https://www.googleapis.com/youtube/v3/videos?part=snippet&id={video_id[0]}&key={settings.YOUTUBE_API_KEYS}")
+                json = response.json()
+                title = json["items"][0]['snippet']['title']
+                video.title = title
+                video.save()
+                return redirect("detail_hall", pk)
+            else:
+                errors = filled_form._errors.setdefault("url", ErrorList())
+                errors.append("please provide a valid Youtube's URL")
 
     ctx = {"form": form, "search_form": search_form, "hall": hall}
     return render(request, "app_halls/add_video.html", ctx)

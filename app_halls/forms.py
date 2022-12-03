@@ -6,11 +6,11 @@ from django.utils.translation import gettext_lazy as _
 class VideoForm(forms.ModelForm):
     class Meta:
         model = Video
-        fields = ["title", "url", "youtube_id"]
+        fields = ["url"]
         labels = {
-            "title": _("Youtube Title"),
             "url": _("Youtube URL"),
-            "youtube_id": _("Youtube ID"),
+            # "title": _("Youtube Title"),
+            # "youtube_id": _("Youtube ID"),
         }
 
 
